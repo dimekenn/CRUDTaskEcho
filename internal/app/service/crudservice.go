@@ -1,12 +1,12 @@
 package service
 
 import (
+	"context"
 	"crudTaskEcho/internal/app/model"
-	"github.com/labstack/echo/v4"
 )
 
 type CRUDService interface {
-	CreateUser(c echo.Context) error
-	UpdateUser(c echo.Context) error
-	GetUserById(c echo.Context) (*model.GetUserRes, error)
+	CreateUser(ctx context.Context, req *model.User) (*model.CreateUserRes, error)
+	UpdateUser(ctx context.Context, req *model.UpdateUserReq) error
+	GetUserById(ctx context.Context, id int) (*model.User, error)
 }

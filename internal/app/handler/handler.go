@@ -1,10 +1,11 @@
 package handler
 
 import (
+	"crudTaskEcho/internal/app/model"
 	"crudTaskEcho/internal/app/service"
-	"fmt"
 	"github.com/labstack/echo/v4"
 	"net/http"
+	"strconv"
 )
 
 //api handler structure, it handles http statuses
@@ -18,12 +19,25 @@ func NewCRUDHandler(service service.CRUDService) *CRUDHandler {
 }
 
 func (C CRUDHandler) CreateUser(c echo.Context) error {
-	fmt.Println("create user")
-	return C.service.CreateUser(c)
+	var req model.User
+	if err := c.Bind(&req); err!=nil{
+		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
+	}
+	res, err := C.service.CreateUser(c.Request().Context(), &req)
+	if err != nil{
+		return err
+	}
+	return c.JSON(http.StatusCreated, res)
 }
 
 func (C CRUDHandler) GetUserByUUID(c echo.Context) error {
-	user, userErr := C.service.GetUserById(c)
+	idStr := c.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil{
+		return echo.NewHTTPError(http.StatusBadRequest, err)
+	}
+
+	user, userErr := C.service.GetUserById(c.Request().Context(), id)
 	if userErr != nil{
 		return userErr
 	}
@@ -31,21 +45,11 @@ func (C CRUDHandler) GetUserByUUID(c echo.Context) error {
 }
 
 func (C CRUDHandler) UpdateUserByUUID(c echo.Context) error {
-	return C.service.UpdateUser(c)
+	var req model.UpdateUserReq
+	if err := c.Bind(&req); err!=nil{
+		return echo.NewHTTPError(http.StatusBadRequest, err)
+	}
+	return C.service.UpdateUser(c.Request().Context(), &req)
 }
 
-//func handlerHTTPStatus(err error) error  {
-//	if err != nil{
-//		if strings.Contains(err.Error(), "user is not found"){
-//			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
-//		} else if strings.Contains(err.Error(), "bad request"){
-//			return echo.NewHTTPError(http.StatusBadRequest, err.Error())
-//		} else {
-//			return echo.NewHTTPError(http.StatusInternalServerError, err.Error())
-//		}
-//	} else {
-//		return nil
-//	}
-//
-//}
 
