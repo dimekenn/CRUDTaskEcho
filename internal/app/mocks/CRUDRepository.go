@@ -15,17 +15,24 @@ type CRUDRepository struct {
 }
 
 // CreateUser provides a mock function with given fields: ctx, req
-func (_m *CRUDRepository) CreateUser(ctx context.Context, req *model.User) error {
+func (_m *CRUDRepository) CreateUser(ctx context.Context, req *model.User) (int, error) {
 	ret := _m.Called(ctx, req)
 
-	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, *model.User) error); ok {
+	var r0 int
+	if rf, ok := ret.Get(0).(func(context.Context, *model.User) int); ok {
 		r0 = rf(ctx, req)
 	} else {
-		r0 = ret.Error(0)
+		r0 = ret.Get(0).(int)
 	}
 
-	return r0
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, *model.User) error); ok {
+		r1 = rf(ctx, req)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 // GetUserById provides a mock function with given fields: ctx, id

@@ -28,7 +28,7 @@ func TestCRUDRepositoryImpl_GetUserById(t *testing.T) {
 
 func TestCRUDRepositoryImpl_UpdateUser(t *testing.T) {
 	repoMock := new(mocks.CRUDRepository)
-	repoMock.On("UpdateUser", mock.Anything, mock.Anything).Return( nil)
+	repoMock.On("UpdateUser", mock.Anything, mock.Anything).Return(nil)
 	err := repoMock.UpdateUser(context.Background(), &model.UpdateUserReq{})
 	assert.Nil(t, err)
 	repoMock.AssertExpectations(t)

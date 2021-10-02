@@ -9,7 +9,7 @@ import (
 )
 
 //api handler structure, it handles http statuses
-type CRUDHandler struct{
+type CRUDHandler struct {
 	service service.CRUDService
 }
 
@@ -20,11 +20,11 @@ func NewCRUDHandler(service service.CRUDService) *CRUDHandler {
 
 func (C CRUDHandler) CreateUser(c echo.Context) error {
 	var req model.User
-	if err := c.Bind(&req); err!=nil{
+	if err := c.Bind(&req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err.Error())
 	}
 	res, err := C.service.CreateUser(c.Request().Context(), &req)
-	if err != nil{
+	if err != nil {
 		return err
 	}
 	return c.JSON(http.StatusCreated, res)
@@ -33,12 +33,12 @@ func (C CRUDHandler) CreateUser(c echo.Context) error {
 func (C CRUDHandler) GetUserByUUID(c echo.Context) error {
 	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)
-	if err != nil{
+	if err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 
 	user, userErr := C.service.GetUserById(c.Request().Context(), id)
-	if userErr != nil{
+	if userErr != nil {
 		return userErr
 	}
 	return c.JSON(http.StatusOK, &user)
@@ -46,10 +46,8 @@ func (C CRUDHandler) GetUserByUUID(c echo.Context) error {
 
 func (C CRUDHandler) UpdateUserByUUID(c echo.Context) error {
 	var req model.UpdateUserReq
-	if err := c.Bind(&req); err!=nil{
+	if err := c.Bind(&req); err != nil {
 		return echo.NewHTTPError(http.StatusBadRequest, err)
 	}
 	return C.service.UpdateUser(c.Request().Context(), &req)
 }
-
-

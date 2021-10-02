@@ -12,12 +12,13 @@ import (
 func TestCRUDServiceImpl_CreateUser(t *testing.T) {
 	mockRepo := new(mocks.CRUDRepository)
 
-	mockRepo.On("CreateUser", mock.Anything, mock.Anything).Return(nil)
+	mockRepo.On("CreateUser", mock.Anything, mock.Anything).Return(2,nil)
 
 	service := NewCRUDService(mockRepo)
 
-	err := service.CreateUser(context.Background(), &model.User{})
+	res , err := service.CreateUser(context.Background(), &model.User{})
 	assert.Nil(t, err)
+	assert.NotNil(t, res)
 }
 
 func TestCRUDServiceImpl_GetUserById(t *testing.T) {
@@ -34,7 +35,7 @@ func TestCRUDServiceImpl_GetUserById(t *testing.T) {
 func TestCRUDServiceImpl_UpdateUser(t *testing.T) {
 	mockRepo := new(mocks.CRUDRepository)
 
-	mockRepo.On("UpdateUser", mock.Anything, mock.Anything).Return( nil)
+	mockRepo.On("UpdateUser", mock.Anything, mock.Anything).Return(nil)
 
 	service := NewCRUDService(mockRepo)
 	err := service.UpdateUser(context.Background(), &model.UpdateUserReq{})

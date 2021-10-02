@@ -11,12 +11,12 @@ import (
 	"time"
 )
 
-func StartHTTPServer(ctx context.Context, errCh chan <- error, cfg *configs.Configs)  {
+func StartHTTPServer(ctx context.Context, errCh chan<- error, cfg *configs.Configs) {
 	app := echo.New()
 
 	pool, poolErr := initDb(ctx, cfg.DbUrl)
-	if poolErr!=nil{
-		errCh <-poolErr
+	if poolErr != nil {
+		errCh <- poolErr
 		return
 	}
 	repo := repository.NewCRUDRepository(pool)
@@ -32,7 +32,7 @@ func StartHTTPServer(ctx context.Context, errCh chan <- error, cfg *configs.Conf
 
 func initDb(ctx context.Context, url string) (*pgxpool.Pool, error) {
 	conf, cfgErr := pgxpool.ParseConfig(url)
-	if cfgErr != nil{
+	if cfgErr != nil {
 		return nil, cfgErr
 	}
 	conf.MaxConns = 20
@@ -40,11 +40,11 @@ func initDb(ctx context.Context, url string) (*pgxpool.Pool, error) {
 	conf.MaxConnIdleTime = 10 * time.Second
 
 	conn, connErr := pgxpool.ConnectConfig(ctx, conf)
-	if connErr != nil{
+	if connErr != nil {
 		return nil, connErr
 	}
 
-	if err := conn.Ping(ctx); err != nil{
+	if err := conn.Ping(ctx); err != nil {
 		return nil, err
 	}
 	return conn, nil

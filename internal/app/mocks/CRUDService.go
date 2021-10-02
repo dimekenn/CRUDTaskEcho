@@ -15,17 +15,26 @@ type CRUDService struct {
 }
 
 // CreateUser provides a mock function with given fields: ctx, req
-func (_m *CRUDService) CreateUser(ctx context.Context, req *model.User) error {
+func (_m *CRUDService) CreateUser(ctx context.Context, req *model.User) (*model.CreateUserRes, error) {
 	ret := _m.Called(ctx, req)
 
-	var r0 error
-	if rf, ok := ret.Get(0).(func(context.Context, *model.User) error); ok {
+	var r0 *model.CreateUserRes
+	if rf, ok := ret.Get(0).(func(context.Context, *model.User) *model.CreateUserRes); ok {
 		r0 = rf(ctx, req)
 	} else {
-		r0 = ret.Error(0)
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*model.CreateUserRes)
+		}
 	}
 
-	return r0
+	var r1 error
+	if rf, ok := ret.Get(1).(func(context.Context, *model.User) error); ok {
+		r1 = rf(ctx, req)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
 }
 
 // GetUserById provides a mock function with given fields: ctx, id
